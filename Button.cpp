@@ -57,7 +57,7 @@ void Button::setPosition(float x, float y) {
 	m_sprite.setPosition(x, y);
 }
 
-void Button::setFunction(std::function<void(void)> func) {
+void Button::setFunction(std::function<void()> func) {
 	m_function = func;
 }
 

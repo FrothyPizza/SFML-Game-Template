@@ -2,11 +2,34 @@
 
 #include <iostream>
 
-Game::Game() : m_window{ { 1280, 720 }, "Game" }, m_currentStateIndex{ 0 } {
+#include "PlayingState.h"
+#include "MenuState.h"
 
-	m_states.push_back(std::make_unique<PlayingState>());
+
+Game* Game::m_instance = 0;
+Game::StateName Game::m_currentState = StateName::Menu;
+std::map<Game::StateName, std::unique_ptr<State>> Game::m_states;
+
+size_t Game::width = 1280;
+size_t Game::height = 720;
+
+Game::Game() : m_window{ { width, height }, "Game" } {
+
+
+	m_states.insert(
+		std::make_pair(StateName::Menu, std::make_unique<MenuState>())
+	);
+	m_states.insert(
+		std::make_pair(StateName::Playing, std::make_unique<PlayingState>())
+	);
+	m_currentState = StateName::Menu;
+
 }
 
+void Game::setCurrentState(StateName state) {
+	if (m_states.count(state) > 0) // if it contains this state
+		m_currentState = state;
+}
 
 
 void Game::run() {
@@ -28,13 +51,16 @@ void Game::run() {
 	}
 }
 
+
+
+
 void Game::update(sf::Time delta) {
-	m_states[m_currentStateIndex]->update(delta);
+	m_states[m_currentState]->update(delta);
 }
 
 void Game::render() {
 	m_window.clear(sf::Color::Black);
-	m_states[m_currentStateIndex]->render(m_window);
+	m_states[m_currentState]->render(m_window);
 	m_window.display();
 }
 
@@ -43,9 +69,9 @@ void Game::handleInput() {
 	while (m_window.pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			m_window.close();
-		m_states[m_currentStateIndex]->handleEvent(m_window, event);
+		m_states[m_currentState]->handleEvent(m_window, event);
 	}
 
-	m_states[m_currentStateIndex]->handleInput(m_window);
+	m_states[m_currentState]->handleInput(m_window);
 
 }

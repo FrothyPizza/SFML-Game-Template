@@ -4,8 +4,9 @@
 #include "Game.h"
 
 int main() {
-    Game game{};
-    game.run();
+
+    Game* game = game->getInstance();
+    game->run();
 
     return 0;
 }

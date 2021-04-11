@@ -8,7 +8,7 @@
 
 class Button {
 public:
-	Button(const std::string& imageFile, sf::Vector2f position);
+	Button(const std::string& imageFile, sf::Vector2f position = sf::Vector2f(0, 0));
 
 	void render(sf::RenderWindow& window);
 
@@ -18,7 +18,7 @@ public:
 
 	void setPosition(sf::Vector2f position);
 	void setPosition(float x, float y);
-	void setFunction(std::function<void(void)> func);
+	void setFunction(std::function<void()> func);
 
 	void handleEvent(const sf::RenderWindow& window, sf::Event e);
 
